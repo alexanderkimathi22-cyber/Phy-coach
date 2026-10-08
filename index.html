@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phy Coach</title>
+    <meta
+      name="description"
+      content="Phy Coach helps users build stronger movement habits with guided workouts, recovery plans, and progress tracking."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">P</span>
+        <span>Phy Coach</span>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#plans">Plans</a>
+        <a href="#about">About</a>
+      </nav>
+      <button class="primary-btn">Get Started</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Train smarter. Recover better.</p>
+          <h1>Personalized physical coaching for everyday strength.</h1>
+          <p class="subtitle">
+            Phy Coach combines movement assessments, tailored routines, and habit tracking to help you stay consistent and perform at your best.
+          </p>
+          <div class="hero-actions">
+            <button class="primary-btn">Start your plan</button>
+            <button class="secondary-btn">Watch demo</button>
+          </div>
+          <ul class="hero-stats">
+            <li><strong>3x</strong> faster progress tracking</li>
+            <li><strong>24/7</strong> guided routines</li>
+            <li><strong>100%</strong> habit-focused</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual" aria-label="Phy Coach dashboard preview">
+          <div class="dashboard-card">
+            <div class="card-header">
+              <span class="dot red"></span>
+              <span class="dot amber"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="card-body">
+              <div class="metric-row">
+                <div>
+                  <span class="label">Weekly goal</span>
+                  <strong>4 workouts</strong>
+                </div>
+                <span class="progress-pill">82%</span>
+              </div>
+
+              <div class="progress-bar">
+                <span></span>
+              </div>
+
+              <div class="schedule">
+                <div class="day done">
+                  <span>Mon</span>
+                  <strong>✔</strong>
+                </div>
+                <div class="day done">
+                  <span>Tue</span>
+                  <strong>✔</strong>
+                </div>
+                <div class="day active">
+                  <span>Wed</span>
+                  <strong>30m</strong>
+                </div>
+                <div class="day">
+                  <span>Thu</span>
+                  <strong>—</strong>
+                </div>
+              </div>
+
+              <div class="mini-panel">
+                <span class="label">Recovery</span>
+                <strong>Ready for session</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="section-heading">
+          <p class="eyebrow">Why Phy Coach</p>
+          <h2>Everything you need to move with confidence.</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="icon">🏋️</div>
+            <h3>Smart training plans</h3>
+            <p>Build routines around your fitness level, schedule, and personal goals.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">📈</div>
+            <h3>Progress insights</h3>
+            <p>Track performance trends over time with clear, motivating metrics.</p>
+          </article>
+          <article class="feature-card">
+            <div class="icon">🧘</div>
+            <h3>Recovery guidance</h3>
+            <p>Balance stress, rest, and intensity with smarter coaching decisions.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="plans" class="plans">
+        <div class="section-heading">
+          <p class="eyebrow">Coaching plans</p>
+          <h2>Pick the rhythm that fits your life.</h2>
+        </div>
+
+        <div class="plan-grid">
+          <div class="plan-card">
+            <h3>Starter</h3>
+            <p class="price">Free</p>
+            <ul>
+              <li>3 guided plans</li>
+              <li>Basic workout tracking</li>
+              <li>Weekly summaries</li>
+            </ul>
+            <button class="secondary-btn">Try free</button>
+          </div>
+
+          <div class="plan-card featured">
+            <span class="badge">Most popular</span>
+            <h3>Coach Plus</h3>
+            <p class="price">$19<span>/month</span></p>
+            <ul>
+              <li>Unlimited personalized plans</li>
+              <li>Adaptive recovery metrics</li>
+              <li>Priority coaching insights</li>
+            </ul>
+            <button class="primary-btn">Get started</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="about" class="footer">
+      <p>Phy Coach © 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
