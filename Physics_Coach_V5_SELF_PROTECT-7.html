@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; media-src 'none'; font-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#173b68">
+<link rel="manifest" href="manifest.json">
+<title>Physics Coach V4 — KCSE Organized Library</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f4f7fb;color:#172033}
+.app{max-width:820px;margin:auto;padding:14px}
+.hero{background:linear-gradient(135deg,#173b68,#2468a8);color:white;border-radius:22px;padding:24px 20px;box-shadow:0 10px 30px #173b6825}
+.hero h1{margin:0 0 6px;font-size:30px}.hero p{margin:0;opacity:.92}
+.badge{display:inline-block;margin-top:12px;padding:6px 10px;border-radius:99px;background:#ffffff22;font-size:13px}
+.card{background:white;border-radius:18px;padding:18px;margin-top:14px;box-shadow:0 5px 20px #1b2b4010}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.tab{background:#e9f1fa;color:#173b68;border:0;border-radius:12px;padding:11px;font-weight:750}
+.tab.active{background:#173b68;color:white}
+label{display:block;font-weight:700;margin:13px 0 7px}
+select,textarea,input{width:100%;padding:12px;border:1px solid #d6deea;border-radius:12px;font-size:16px;background:#fff}
+textarea{min-height:80px;resize:vertical}
+button{border:0;border-radius:12px;padding:12px 15px;font-size:16px;font-weight:750;cursor:pointer;margin-top:10px}
+.primary{background:#173b68;color:white;width:100%}.secondary{background:#e9f1fa;color:#173b68}
+.result{display:none}.result h2{margin-top:0}.quote{font-size:19px;font-weight:750;line-height:1.4}
+.step{padding:12px;background:#f4f7fb;border-radius:12px;margin:8px 0}
+.small{color:#637086;font-size:14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.progress{height:11px;background:#e6ebf2;border-radius:99px;overflow:hidden;margin-top:9px}.bar{height:100%;width:0;background:#2b78b8;transition:.3s}
+.history{display:grid;gap:8px;margin-top:9px}.history div{padding:9px 11px;border-radius:10px;background:#f7f9fc;font-size:14px}
+.quizQ{font-weight:800;font-size:18px;line-height:1.4}.option{display:block;width:100%;text-align:left;background:#f7f9fc;margin-top:8px;border:1px solid #dfe6ef}
+.option.correct{background:#dff5e5}.option.wrong{background:#ffe2e2}
+.score{font-size:18px;font-weight:800}.hidden{display:none}.footer{text-align:center;color:#718096;font-size:13px;padding:18px}
+.install{display:none;margin-top:10px;width:100%}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.tabs{grid-template-columns:1fr}}
+
+.yearList{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.yearBtn{margin:0;background:#f7f9fc;border:1px solid #dfe6ef;color:#173b68;text-align:left;padding:15px;border-radius:14px;font-size:17px}
+.yearBtn:hover{background:#e9f1fa}
+.paperList{margin-top:14px;padding:14px;background:#f4f7fb;border-radius:16px}
+.paperHead{font-weight:800;font-size:18px;margin-bottom:8px}
+.paperBtn{display:block;width:100%;margin:8px 0;background:#173b68;color:white;text-align:left}
+.paperNote{font-size:13px;color:#637086;margin-top:8px}
+@media(max-width:600px){.yearList{grid-template-columns:1fr}}
+
+.kcseHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.badgeLight{padding:6px 10px;border-radius:99px;background:#e9f1fa;color:#173b68;font-size:13px;font-weight:800;white-space:nowrap}
+.kcseSearch{display:flex;gap:8px;margin-top:12px}.kcseSearch input{flex:1}.kcseSearch button{margin-top:0}
+.yearList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.yearCard{background:#f7f9fc;border:1px solid #dfe6ef;border-radius:16px;padding:12px}
+.yearBtn{width:100%;margin:0;background:white;color:#173b68;text-align:left;border:1px solid #dfe6ef}
+.yearBtn .arrow{float:right;font-size:20px}.yearPapers{display:none;margin-top:8px}.yearPapers.open{display:block}
+.paperBtn{display:block;width:100%;margin:7px 0;background:#173b68;color:white;text-align:left}
+.paperBtn.practice{background:#e9f1fa;color:#173b68}.paperBtn span{float:right}
+.paperNote{font-size:12px;color:#637086;margin:6px 2px}.paperList{margin-top:14px;padding:14px;background:#f4f7fb;border-radius:16px}
+.paperHead{font-weight:800;font-size:18px;margin-bottom:8px}
+@media(max-width:600px){.yearList{grid-template-columns:1fr}.kcseSearch{display:block}.kcseSearch button{width:100%}}
+
+/* Version 5 — standard Waves & Interference question layout */
+.standardQuiz{display:grid;gap:14px}
+.standardQ{border:1px solid #d6deea;border-radius:16px;padding:16px;background:#fff}
+.standardQ h3{margin:0 0 8px;color:#173b68}
+.marks{float:right;background:#e9f1fa;color:#173b68;border-radius:99px;padding:4px 9px;font-size:12px}
+.questionText{font-size:16px;line-height:1.55}
+.answerBox{min-height:78px;margin-top:10px}
+.diagramBox{margin:12px 0;padding:10px;border:1px solid #dfe6ef;border-radius:14px;background:#fffdf6;overflow:auto}
+.diagramCaption{text-align:center;font-size:12px;color:#637086;margin-top:5px}
+.checkBtn{background:#173b68;color:#fff;width:100%}
+.feedback{margin-top:10px;padding:12px;border-radius:12px;background:#f4f7fb;line-height:1.5}
+.marking{margin-top:8px;padding:10px;border-left:4px solid #2b78b8;background:#eef6ff}
+</style>
+<style>
+.securityNotice{margin:10px 0;padding:10px 12px;border:1px solid #b7d7c0;border-radius:12px;background:#f4fbf6;color:#174d2b;font-size:.88rem;line-height:1.4}
+</style>
+
+<style id="selfProtectStyle">
+#securityLock{display:none;position:fixed;inset:0;z-index:999999;background:#111;color:#fff;padding:28px;box-sizing:border-box;font-family:system-ui,sans-serif}
+#securityLock .box{max-width:620px;margin:10vh auto;padding:24px;border:1px solid #555;border-radius:16px;background:#1b1b1b}
+#securityLock button{padding:12px 18px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+.securityStatus{font-size:.82rem;opacity:.75;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="securityLock" role="alertdialog" aria-modal="true" aria-labelledby="securityLockTitle">
+  <div class="box">
+    <h2 id="securityLockTitle">🔒 Physics Coach Security Lock</h2>
+    <p id="securityLockText">Suspicious browser activity was detected. Physics Coach has stopped sensitive actions to protect the app.</p>
+    <p class="securityStatus">No passwords, banking details, or authentication information are requested by this app.</p>
+    <button onclick="location.reload()">Reload Physics Coach</button>
+  </div>
+</div>
+
+<div class="app">
+<section class="hero">
+  <h1>⚡ Physics Coach</h1>
+  <p>Advice, motivation, practice and a practical next step for every physics student.</p>
+  <span class="badge">Version 4 • KCSE Organized Library • Offline-ready</span>
+  <button id="installBtn" class="install secondary">📲 Install Physics Coach</button>
+</section>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('coach',this)">Coach</button>
+  <button class="tab" onclick="showTab('quiz',this)">Quick Quiz</button>
+  <button class="tab" onclick="showTab('progress',this)">Progress</button>
+<button class="tab" onclick="showTab('kcse',this)">🇰🇪 KCSE</button>
+</div>
+
+<section id="coach" class="card">
+  <h2>🎯 Get your next step</h2>
+  <label for="mood">How are you feeling about physics?</label>
+  <select id="mood">
+    <option value="confused">😕 Confused</option>
+    <option value="stuck">🧱 Stuck on a problem</option>
+    <option value="unmotivated">😴 Not motivated</option>
+    <option value="anxious">😟 Worried about an exam</option>
+    <option value="confident">💪 Fairly confident</option>
+  </select>
+  <label for="topic">What topic are you working on?</label>
+  <select id="topic">
+    <option>Mechanics</option><option>Forces</option><option>Energy</option>
+    <option>Waves</option><option>Electricity</option><option>Magnetism</option>
+    <option>Heat & Thermodynamics</option><option>Light / Optics</option>
+    <option>Modern Physics</option><option>General Physics</option>
+  </select>
+  <label for="problem">What is difficult? (optional)</label>
+  <textarea id="problem" placeholder="Example: I don't know which formula to use."></textarea>
+  <button class="primary" onclick="coach()">Give Me Advice ⚡</button>
+</section>
+
+<section id="result" class="card result">
+  <h2 id="title"></h2>
+  <p class="quote" id="message"></p>
+  <h3>🎯 Your next 10-minute mission</h3><div class="step" id="mission"></div>
+  <h3>🧠 Physics strategy</h3><div class="step" id="strategy"></div>
+  <h3>🔥 Remember</h3><div class="step" id="remember"></div>
+  <button class="secondary" onclick="completeMission()">I completed my mission ✓</button>
+</section>
+
+<section id="quiz" class="card hidden">
+  <h2>🌊 Waves & Interference — Standard Practice</h2>
+  <p class="small">Three original KCSE-style questions on interference, including Young’s double-slit experiment and light colour interference.</p>
+  <div id="quizArea"></div>
+</section>
+
+
+<div class="securityNotice" role="note">
+  🔒 <b>Safety:</b> Self-Protect monitor active. Physics Coach does not request passwords, banking details, or payment information.
+  KCSE links are restricted to trusted HTTPS paper sites.
+</div>
+<section id="kcse" class="card hidden">
+  <div class="kcseHeader">
+    <div><h2>🇰🇪 KCSE Physics Library</h2><p class="small">Choose a year, then tap a paper. The paper opens first in a new tab.</p></div>
+    <span class="badgeLight">2010–2025 • Actual papers</span>
+  </div>
+  <div class="kcseSearch">
+    <input id="yearSearch" type="number" min="2010" max="2025" placeholder="Search year, e.g. 2024" oninput="filterYears()">
+    <button class="secondary" onclick="clearYearSearch()">Show all years</button>
+  </div>
+  <div id="yearList" class="yearList"></div>
+  <div id="paperList" class="paperList hidden"></div>
+</section>
+
+
+<section id="progress" class="card hidden">
+  <h2>🏆 Your Progress</h2>
+  <div class="grid">
+    <div class="step"><b id="missions">0</b><br><span class="small">missions completed</span></div>
+    <div class="step"><b id="quizScore">0</b><br><span class="small">quiz points</span></div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <p class="small">Progress bar resets every 10 missions.</p>
+  <h3>Recent missions</h3>
+  <div id="history" class="history"></div>
+  <button class="secondary" onclick="resetProgress()">Reset my local progress</button>
+</section>
+
+<section class="card">
+  <h3>📚 Quick Physics Method</h3>
+  <div class="step"><b>1. Understand:</b> What is the question asking?</div>
+  <div class="step"><b>2. List:</b> Write the known values and units.</div>
+  <div class="step"><b>3. Choose:</b> Pick a physics principle or equation.</div>
+  <div class="step"><b>4. Solve:</b> Substitute carefully and calculate.</div>
+  <div class="step"><b>5. Check:</b> Does the answer and unit make sense?</div>
+</section>
+
+<div class="footer">Built to help students replace “I can't do physics” with “I can learn this one step at a time.”</div>
+</div>
+
+<script>
+const advice={
+confused:{title:"Confusion is part of learning.",message:"You do not need to understand the whole topic at once. Break one problem into small pieces.",strategy:"Underline what is given, circle what you must find, then choose the relevant law before calculating.",remember:"A wrong attempt is useful information. It shows you what to learn next."},
+stuck:{title:"Being stuck does not mean you are bad at physics.",message:"Pause, breathe, and restart from the known quantities. Organize the information before trying another calculation.",strategy:"Draw a simple diagram. Write known values with units. Ask which principle connects what you know to what you need.",remember:"Identify the exact step where you are stuck and learn that step."},
+unmotivated:{title:"You don't need motivation before you start.",message:"Start with just 10 minutes. Action often creates motivation.",strategy:"Choose one small question, put your phone away, and solve it slowly.",remember:"Small daily progress beats occasional long study sessions."},
+anxious:{title:"Exam anxiety is not proof that you are unprepared.",message:"Focus on what you can control: practice, units, formulas, diagrams and checking your work.",strategy:"Do one timed question. Mark where you lost time or marks and turn that mistake into your next study target.",remember:"You are preparing a skill, not trying to predict the exam."},
+confident:{title:"Great—use that confidence to go one level deeper.",message:"Don't only memorize formulas. Explain why they work and apply them in unfamiliar situations.",strategy:"Take one familiar question and change one condition. Predict what should happen before calculating.",remember:"Real mastery means you can explain your reasoning, not just get the final number."}
+};
+const topicTips={
+"Mechanics":"Sketch the motion and identify displacement, velocity, acceleration and forces before choosing equations.",
+"Forces":"Draw a free-body diagram. Name every force and keep directions/sign conventions consistent.",
+"Energy":"Track where the energy starts and where it goes. Write an energy balance before substituting numbers.",
+"Waves":"Identify wavelength, frequency, period and wave speed, then check that the units match.",
+"Electricity":"Draw the circuit. Separate current, voltage and resistance, then apply the appropriate circuit rule.",
+"Magnetism":"Start with the direction of the field/current/force and use a clear diagram before calculating.",
+"Heat & Thermodynamics":"Keep track of energy transfer and temperature changes. Watch units carefully.",
+"Light / Optics":"Draw the rays first. Label angles, distances and focal points before using an equation.",
+"Modern Physics":"Define each quantity and its unit. Focus on the physical meaning behind the equation.",
+"General Physics":"Translate the words into a diagram, known values, unknown, principle, equation and units."
+};
+const standardQuestions=[
+{
+ q:"Two narrow sources produce waves of the same frequency and maintain a constant phase relationship.",
+ parts:[
+  "Define coherent sources.",
+  "State the condition for constructive interference."
+ ],
+ marks:2,
+ answer:"Coherent sources have the same frequency (or wavelength) and maintain a constant phase difference. Constructive interference occurs when the path difference is nλ, where n = 0, 1, 2, … ."
+},
+{
+ q:"In a Young’s double-slit experiment, the slit separation is 0.50 mm, the screen is 2.0 m from the slits and the wavelength of the light is 600 nm.",
+ parts:[
+  "Calculate the fringe separation.",
+  "State one way of increasing the fringe separation."
+ ],
+ marks:4,
+ answer:"Using β = λD/d: β = (600 × 10⁻⁹ × 2.0)/(0.50 × 10⁻³) = 2.4 × 10⁻³ m = 2.4 mm. Increasing the screen distance D or increasing the wavelength λ increases the fringe separation (reducing slit separation d also increases it)."
+},
+{
+ q:"Monochromatic red and green light are used in a double-slit interference experiment.",
+ parts:[
+  "Study the colour diagram below.",
+  "Explain why bright and dark fringes are formed.",
+  "What would you observe at the central fringe when white light is used? Explain briefly."
+ ],
+ marks:4,
+ answer:"The two coherent waves superpose: in-phase waves reinforce to form bright fringes, while out-of-phase waves cancel to form dark fringes. With white light, the central fringe is white because all wavelengths have zero path difference there; coloured fringes occur away from the centre because different wavelengths have different fringe spacings."
+}
+];
+
+function interferenceDiagram(){
+ return `
+ <div class="diagramBox" aria-label="Colour diagram showing red and green light interference">
+  <svg viewBox="0 0 760 250" width="100%" role="img" aria-label="Young double slit light interference colour diagram">
+   <defs>
+    <linearGradient id="redBeam" x1="0" x2="1"><stop offset="0" stop-color="#e53935"/><stop offset="1" stop-color="#ff8a80"/></linearGradient>
+    <linearGradient id="greenBeam" x1="0" x2="1"><stop offset="0" stop-color="#16a34a"/><stop offset="1" stop-color="#86efac"/></linearGradient>
+   </defs>
+   <rect x="0" y="0" width="760" height="250" rx="12" fill="#fffdf6"/>
+   <text x="28" y="30" font-size="18" font-weight="700" fill="#173b68">Young double-slit interference — coloured light</text>
+   <rect x="70" y="65" width="12" height="125" fill="#173b68"/>
+   <text x="42" y="215" font-size="13" fill="#637086">slits</text>
+   <circle cx="82" cy="100" r="6" fill="#ef4444"/>
+   <circle cx="82" cy="150" r="6" fill="#22c55e"/>
+   <path d="M88 100 Q220 55 380 90 T690 70" fill="none" stroke="url(#redBeam)" stroke-width="7"/>
+   <path d="M88 100 Q220 145 380 110 T690 150" fill="none" stroke="url(#redBeam)" stroke-width="7"/>
+   <path d="M88 150 Q220 105 380 125 T690 95" fill="none" stroke="url(#greenBeam)" stroke-width="6"/>
+   <path d="M88 150 Q220 195 380 135 T690 180" fill="none" stroke="url(#greenBeam)" stroke-width="6"/>
+   <rect x="690" y="45" width="14" height="160" fill="#173b68"/>
+   <g>
+    <rect x="705" y="55" width="45" height="22" fill="#ef4444"/>
+    <rect x="705" y="77" width="45" height="22" fill="#fca5a5"/>
+    <rect x="705" y="99" width="45" height="22" fill="#f8fafc"/>
+    <rect x="705" y="121" width="45" height="22" fill="#86efac"/>
+    <rect x="705" y="143" width="45" height="22" fill="#22c55e"/>
+    <rect x="705" y="165" width="45" height="22" fill="#f8fafc"/>
+   </g>
+   <text x="600" y="222" font-size="13" fill="#637086">screen / coloured fringes</text>
+   <text x="105" y="92" font-size="13" fill="#dc2626">red</text>
+   <text x="105" y="167" font-size="13" fill="#15803d">green</text>
+  </svg>
+  <div class="diagramCaption">Illustrative colour diagram: overlapping coherent light waves produce bright and dark regions.</div>
+ </div>`;
+}
+
+function renderQuiz(){
+ const area=document.getElementById("quizArea");
+ area.innerHTML=`<div class="standardQuiz">
+  ${standardQuestions.map((x,i)=>`
+   <article class="standardQ">
+    <h3>Question ${i+1} <span class="marks">${x.marks} marks</span></h3>
+    <div class="questionText"><b>${x.q}</b></div>
+    ${i===2?interferenceDiagram():""}
+    <ol>${x.parts.map(part=>`<li>${part}</li>`).join("")}</ol>
+    <textarea class="answerBox" id="stdAns${i}" placeholder="Write your answer here..."></textarea>
+    <button class="secondary" onclick="showStandardAnswer(${i})">Show marking guide</button>
+    <div id="stdFeedback${i}" class="feedback hidden"></div>
+   </article>`).join("")}
+  <button class="checkBtn" onclick="completeStandardPractice()">✓ Complete 3-question practice</button>
+  <p class="small">Standard KCSE-style practice • Original revision questions • Topic: Waves — Interference</p>
+ </div>`;
+}
+
+function showStandardAnswer(i){
+ const f=document.getElementById("stdFeedback"+i);
+ f.classList.remove("hidden");
+ f.innerHTML="<b>Marking guide:</b><div class='marking'>"+standardQuestions[i].answer+"</div>";
+}
+
+function completeStandardPractice(){
+ completed++;
+ history.unshift(new Date().toLocaleDateString()+" — Waves & Interference (3 questions)");
+ history=history.slice(0,10);
+ localStorage.setItem("physicsMissions",completed);
+ localStorage.setItem("physicsHistory",JSON.stringify(history));
+ render();
+ alert("Practice completed! Review the marking guides and correct any errors. 🔥");
+}
+
+const kcseYears=[2025,2024,2023,2022,2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
+const kcseArchive="https://www.revisekenya.com/kcse-physics-past-papers-and-answers/";
+const africaPhysics="https://www.africaexams.com/board/kenya/kenya-kcse-physics";
+const paperUrls={
+  "2025-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2025-2025-KCSE-PHYSICS-PAPER-1",
+  "2025-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2025-2025-KCSE-PHYSICS-PAPER-2",
+  "2024-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2024-2024-KCSE-PHYSICS-PAPER-1",
+  "2024-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2024-2024-KCSE-PHYSICS-PAPER-2",
+  "2024-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2024-2024-KCSE-PHYSICS-PAPER-3",
+  "2023-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2023-PHYSICS-PP1-KCSE-2023",
+  "2023-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2023-PHYSICS-PP2-KCSE-2023",
+  "2023-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2023-PHYSICS-PP3-KCSE-2023",
+  "2022-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2022-2022-KCSE-Physics-Paper-1",
+  "2022-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2022-2022-KCSE-Physics-Paper-2",
+  "2022-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2022-2022-KCSE-Physics-Paper-3",
+  "2021-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2021-KCSE-2021-Physics-Paper-1",
+  "2021-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2021-KCSE-2021-Physics-Paper-2",
+  "2020-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2020-Physics-Paper-1-KCSE-2020",
+  "2020-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2020-Physics-Paper-2-KCSE-2020",
+  "2020-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2020-Physics-Practicals-Paper-3-KCSE-2020",
+  "2019-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2019-PHYSICS-P1-KCSE-2019",
+  "2019-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2019-PHYSICS-P2-KCSE-2019",
+  "2019-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2019-PHYSICS-P3-KCSE-2019",
+  "2018-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2018-KCSE-2018-KNEC-PHY-P1",
+  "2018-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2018-KCSE-2018-KNEC-PHY-P2",
+  "2018-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2018-KCSE-2018-KNEC-PHY-P3",
+  "2017-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2017-KCSE-2017-PHYSICS-PP1",
+  "2017-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2017-KCSE-2017-PHYSICS-PP2",
+  "2017-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2017-KCSE-2017-PHYSCIS-PP3",
+  "2016-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2016-2016-KCSE-PHYSICS-PP1",
+  "2016-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2016-2016-KCSE-PHYSICS-PP2",
+  "2016-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2016-2016-KCSE-PHYSICS-PP3",
+  "2015-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2015-2015-KCSE-PHYSICS-PP1",
+  "2015-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2015-2015-KCSE-PHYSICS-PP2",
+  "2015-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2015-2015-KCSE-PHYSICS-PP3",
+  "2014-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2014-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2014-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2013-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2013-2013-KCSE-PHYSICS-QUESTIONSx",
+  "2013-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2013-2013-KCSE-PHYSICS-QUESTIONSx",
+  "2013-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2013-2013-KCSE-PHYSICS-QUESTIONSx",
+  "2012-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2012-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2012-2012-KCSE-PHYSICS-PAPER-2",
+  "2012-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2012-2012-KCSE-PHYSICS-PRACTICAL-PAPER-3",
+  "2011-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2011-2011-KCSE-KCSE-KCSE-PHYSICS-Q-P1",
+  "2011-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2011-2011-KCSE-KCSE-KCSE-PHYSICS-Q-P2",
+  "2011-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2011-2011-KCSE-KCSE-KCSE-PHYSICS-Q-P3",
+  "2010-1":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2010-2":"https://www.africaexams.com/board/kenya/kenya-kcse-physics",
+  "2010-3":"https://www.africaexams.com/board/kenya/kenya-kcse-physics/2010-2010-KCSE-PHYSICS-PAPER-3-Q"
+};
+function paperArchiveUrl(y){return africaPhysics;}
+function renderYearList(years=kcseYears){
+ const box=document.getElementById("yearList");
+ box.innerHTML=years.length?years.map(y=>`<div class="yearCard"><button class="yearBtn" onclick="toggleYear(${y})"><b>KCSE Physics ${y}</b><span class="arrow">⌄</span></button><div id="papers-${y}" class="yearPapers"><p class="paperNote">Select a paper:</p><button class="paperBtn" onclick="openPaper(${y},1)">📄 Paper 1 <span>Open ›</span></button><button class="paperBtn" onclick="openPaper(${y},2)">📄 Paper 2 <span>Open ›</span></button><button class="paperBtn" onclick="openPaper(${y},3)">🧪 Paper 3 — Practical <span>Open ›</span></button><button class="paperBtn practice" onclick="showPractice(${y})">⚡ KCSE-style practice <span>›</span></button></div></div>`).join(""):'<div class="step">No matching year. Try 2010–2025 • Actual papers.</div>';
+}
+function toggleYear(y){const p=document.getElementById("papers-"+y);document.querySelectorAll(".yearPapers").forEach(x=>{if(x!==p)x.classList.remove("open")});p.classList.toggle("open");}
+function openPaper(y,p){
+  const key = `${y}-${p}`;
+  const url = paperUrls[key] || paperArchiveUrl(y);
+  let u;
+  try { u = new URL(url); } catch(e) { return; }
+  const trustedHosts = new Set([
+    "www.africaexams.com",
+    "africaexams.com",
+    "www.revisekenya.com",
+    "revisekenya.com",
+    "www.masomofiti.co.ke",
+    "masomofiti.co.ke"
+  ]);
+  if (u.protocol !== "https:" || !trustedHosts.has(u.hostname)) {
+    alert("For your safety, Physics Coach blocked this link.");
+    return;
+  }
+  window.open(u.href, "_blank", "noopener,noreferrer");
+}
+function showPractice(y){const b=document.getElementById("paperList");b.classList.remove("hidden");b.innerHTML=`<div class="paperHead">⚡ ${y} KCSE-style practice</div><p class="small">Original revision questions, not reproductions of the exam paper.</p><div class="step"><b>Paper 1:</b> Mechanics, Heat and measurement.</div><div class="step"><b>Paper 2:</b> Waves, Optics, Electricity, Magnetism and Modern Physics.</div><div class="step"><b>Paper 3:</b> Practical skills, measurements, graphs and conclusions.</div><button class="primary" onclick="showTab('quiz',document.querySelectorAll('.tab')[1])">Start Quick Physics Quiz →</button>`;b.scrollIntoView({behavior:"smooth",block:"nearest"});}
+function filterYears(){const q=document.getElementById("yearSearch").value.trim();renderYearList(q?kcseYears.filter(y=>String(y).includes(q)):kcseYears);}
+function clearYearSearch(){document.getElementById("yearSearch").value="";renderYearList();}
+function loadKcse(){renderYearList();document.getElementById("paperList").classList.add("hidden");}
+let completed=Number(localStorage.getItem("physicsMissions")||0);
+let history=JSON.parse(localStorage.getItem("physicsHistory")||"[]");
+let score=Number(localStorage.getItem("physicsQuizScore")||0);
+let qi=0;
+
+function coach(){
+ const mood=document.getElementById("mood").value, topic=document.getElementById("topic").value;
+ const problem=document.getElementById("problem").value.trim(), a=advice[mood];
+ document.getElementById("title").textContent=a.title;
+ document.getElementById("message").textContent=a.message;
+ document.getElementById("strategy").textContent=a.strategy+" "+topicTips[topic];
+ let mission="Solve one basic "+topic+" question. Write: Given → Find → Principle → Equation → Answer with units.";
+ if(problem) mission="Break your difficulty into one question: What do I already know? What exactly do I need to find? Attempt only the first step.";
+ if(mood==="anxious") mission="Set a 10-minute timer and solve one "+topic+" question without looking at the answer. Mark your work afterwards.";
+ if(mood==="unmotivated") mission="Open your notes, choose one "+topic+" example, and explain the solution aloud in your own words.";
+ document.getElementById("mission").textContent=mission;
+ document.getElementById("remember").textContent=topic+" is learned through repeated attempts. "+a.remember;
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+}
+function completeMission(){
+ completed++;
+ const topic=document.getElementById("topic").value;
+ history.unshift(new Date().toLocaleDateString()+" — "+topic+" mission completed");
+ history=history.slice(0,10);
+ localStorage.setItem("physicsMissions",completed);
+ localStorage.setItem("physicsHistory",JSON.stringify(history));
+ render();
+ alert("Mission completed! Keep going. 🔥");
+}
+function render(){
+ document.getElementById("missions").textContent=completed;
+ document.getElementById("quizScore").textContent=score;
+ document.getElementById("bar").style.width=Math.min((completed%10)*10 || (completed?100:0),100)+"%";
+ document.getElementById("history").innerHTML=history.length?history.map(x=>"<div>✓ "+x+"</div>").join(""):"<div>No missions completed yet. Start today!</div>";
+}
+function showTab(id,btn){
+ ["coach","quiz","progress","kcse"].forEach(x=>document.getElementById(x).classList.toggle("hidden",x!==id));
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active")); btn.classList.add("active");
+ if(id==="quiz") renderQuiz(); if(id==="progress") render(); if(id==="kcse") loadKcse();
+}
+function renderQuiz(){
+ if(qi>=quizzes.length) qi=0;
+ const x=quizzes[qi];
+ document.getElementById("quizArea").innerHTML='<div class="quizQ">'+(qi+1)+"/"+quizzes.length+". "+x.q+'</div>'+
+ x.o.map((v,i)=>'<button class="option" onclick="answer('+i+',this)">'+v+'</button>').join("")+
+ '<div id="quizFeedback" class="step hidden"></div>';
+}
+function answer(i,btn){ /* Legacy handler retained for compatibility. */ }
+function nextQuiz(){ renderQuiz(); }
+
+function resetProgress(){
+ if(confirm("Reset local missions and quiz score?")){
+  completed=0;history=[];score=0;localStorage.removeItem("physicsMissions");localStorage.removeItem("physicsHistory");localStorage.removeItem("physicsQuizScore");render();
+ }
+}
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+let deferredPrompt;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;document.getElementById("installBtn").style.display="block";});
+document.getElementById("installBtn").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}};
+render(); renderQuiz(); loadKcse();
+</script>
+
+<script>
+(function(){
+  document.addEventListener("click", function(e){
+    const a=e.target.closest && e.target.closest("a[target='_blank']");
+    if(a) a.rel="noopener noreferrer";
+  }, true);
+})();
+</script>
+
+
+<script id="selfProtectMonitor">
+(function(){
+  "use strict";
+
+  const LOCK_KEY = "physicsCoachSecurityLock";
+  let locked = false;
+
+  function lock(reason){
+    if(locked) return;
+    locked = true;
+    try { sessionStorage.setItem(LOCK_KEY, String(reason || "suspicious activity")); } catch(e){}
+    const panel=document.getElementById("securityLock");
+    const text=document.getElementById("securityLockText");
+    if(text) text.textContent="Physics Coach detected suspicious browser activity and stopped sensitive actions. Reason: "+(reason||"security check");
+    if(panel) panel.style.display="block";
+    document.documentElement.style.pointerEvents="none";
+    if(panel) panel.style.pointerEvents="auto";
+  }
+
+  function allowedScript(el){
+    if(!el || el.tagName!=="SCRIPT") return true;
+    // This file intentionally contains its own inline scripts and no external scripts.
+    return !el.src;
+  }
+
+  function inspectNode(node){
+    if(!node || node.nodeType!==1) return;
+    const tag=node.tagName;
+    if(tag==="IFRAME" || tag==="OBJECT" || tag==="EMBED" || tag==="APPLET"){
+      lock("unauthorized embedded content");
+      return;
+    }
+    if(tag==="SCRIPT" && !allowedScript(node)){
+      lock("unexpected external script");
+      return;
+    }
+    if(tag==="FORM"){
+      node.addEventListener("submit",function(e){
+        e.preventDefault();
+        lock("form submission blocked");
+      },true);
+    }
+  }
+
+  // Establish a baseline of important browser APIs.
+  const baseline={
+    fetch: window.fetch,
+    XMLHttpRequest: window.XMLHttpRequest,
+    WebSocket: window.WebSocket,
+    Function: window.Function,
+    eval: window.eval
+  };
+
+  // Observe later DOM injections.
+  const observer=new MutationObserver(function(mutations){
+    if(locked) return;
+    for(const m of mutations){
+      for(const n of m.addedNodes) inspectNode(n);
+    }
+  });
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+
+  // Block unexpected form submission.
+  document.addEventListener("submit",function(e){
+    e.preventDefault();
+    lock("form submission blocked");
+  },true);
+
+  // Protect against common destructive browser shortcuts inside the app.
+  document.addEventListener("keydown",function(e){
+    if((e.ctrlKey||e.metaKey) && ["u","s"].includes(String(e.key).toLowerCase())){
+      e.preventDefault();
+    }
+  },true);
+
+  // Periodically verify critical browser APIs have not been replaced.
+  setInterval(function(){
+    if(locked) return;
+    try{
+      if(window.fetch!==baseline.fetch ||
+         window.XMLHttpRequest!==baseline.XMLHttpRequest ||
+         window.WebSocket!==baseline.WebSocket ||
+         window.Function!==baseline.Function ||
+         window.eval!==baseline.eval){
+        lock("critical browser API changed");
+      }
+      if(document.querySelector("iframe,object,embed,applet,script[src]")){
+        lock("unexpected active content detected");
+      }
+    }catch(e){
+      lock("security check failed");
+    }
+  },3000);
+
+  // Clear any previous lock state after a genuine reload.
+  try { sessionStorage.removeItem(LOCK_KEY); } catch(e){}
+})();
+</script>
+</body>
+</html>
